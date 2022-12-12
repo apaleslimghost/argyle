@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "run-p start:*",
-    "start:server": "nodemon -w server server/index.js",
+    "start:server": "nodemon -r dotenv/config -w server server/index.js",
     "start:tunnel": "lt --port 3030 --subdomain argyle2"
   },
   "repository": {
@@ -20,12 +20,14 @@
   },
   "homepage": "https://github.com/apaleslimghost/argyle#readme",
   "dependencies": {
+    "@slack/web-api": "^6.8.0",
     "body-parser": "^2.0.0-beta.1",
     "express": "^5.0.0-beta.1",
     "express-sse": "^0.5.3",
     "preact": "^10.11.3"
   },
   "devDependencies": {
+    "dotenv": "^16.0.3",
     "localtunnel": "^2.0.2",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5"

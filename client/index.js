@@ -60,7 +60,7 @@ function App () {
 	return html`
 		<ul>
 			${messages.map(({ user, text, ts, blocks }) => html`
-				<li key=${ts}><strong>${user}</strong> <${Blocks} blocks=${blocks} /></li>
+				<li key=${ts}><strong>${user.real_name}</strong> <${Blocks} blocks=${blocks} /></li>
 			`)}
 		</ul>
 	`

@@ -2,9 +2,10 @@ const express = require('express')
 const SSE = require('express-sse')
 const bodyParser = require('body-parser')
 const util = require('util')
+const { WebClient } = require('@slack/web-api')
 
 const sse = new SSE([])
-
+const slack = new WebClient(process.env.SLACK_BOT_TOKEN)
 const app = express()
 
 app.use(express.static('client'))
@@ -12,7 +13,7 @@ app.use('/common', express.static('common'))
 
 app.get('/events', (req, res, next) => { res.flush = () => {}; next() }, sse.init)
 
-app.post('/webhook', bodyParser.json(), (req, res) => {
+app.post('/webhook', bodyParser.json(), async (req, res) => {
 	switch(req.body.type) {
 		case `url_verification`: {
 			const { challenge } = req.body
@@ -23,8 +24,8 @@ app.post('/webhook', bodyParser.json(), (req, res) => {
 		case `event_callback`: {
 			switch(req.body.event.type) {
 				case `message`: {
-					console.log(util.inspect(req.body.event.blocks, {depth: null}))
-					sse.send(req.body.event)
+					const { user } = await slack.users.info({ user: req.body.event.user })
+					sse.send({ ...req.body.event, user })
 					break
 				}
 
