@@ -13,6 +13,38 @@ app.use('/common', express.static('common'))
 
 app.get('/events', (req, res, next) => { res.flush = () => {}; next() }, sse.init)
 
+async function decorateElement(element) {
+	const promises = []
+
+	if(element.elements) {
+		promises.push(decorateElements(element.elements))
+	}
+
+	switch(element.type) {
+		case 'channel':
+			promises.push(
+				slack.conversations.info({ channel: element.channel_id }).then(({channel}) => element.channel = channel)
+			)
+			break
+
+		case 'user':
+			promises.push(
+				slack.users.info({ user: element.user_id }).then(({user}) => element.user = user)
+			)
+			break
+	}
+
+	await Promise.all(promises)
+}
+
+async function decorateElements(elements) {
+	await elements.map(element => decorateElement(element))
+}
+
+async function decorateBlocks(blocks) {
+	await blocks.map(block => block.elements && decorateElements(block.elements))
+}
+
 app.post('/webhook', bodyParser.json(), async (req, res) => {
 	switch(req.body.type) {
 		case `url_verification`: {
@@ -24,9 +56,29 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 		case `event_callback`: {
 			switch(req.body.event.type) {
 				case `message`: {
-					const { user } = await slack.users.info({ user: req.body.event.user })
-					const { user: parent } = req.body.event.parent_user_id ? await slack.users.info({ user: req.body.event.parent_user_id }) : {}
-					sse.send({ ...req.body.event, user, parent })
+					if(req.body.event.blocks) {
+						const event = { ...req.body.event }
+
+						const promises = [
+							decorateBlocks(req.body.event.blocks),
+							slack.users.info({ user: req.body.event.user }).then(({user}) => event.user = user)
+						]
+
+						if(req.body.event.parent_user_id) {
+							promises.push(
+								slack.users.info({ user: req.body.event.parent_user_id }).then(({user}) => event.parent = user)
+							)
+						}
+
+						await Promise.all(promises)
+
+						console.log(event)
+
+						sse.send(event)
+					}
+
+					console.log(req.body)
+					res.status(201).send()
 					break
 				}
 
@@ -35,6 +87,8 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 					res.status(401).send()
 				}
 			}
+
+			break
 		}
 
 		default: {

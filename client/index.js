@@ -32,6 +32,8 @@ const elements = {
 	rich_text_list: ({ elements, style }) => html`<${style === 'ordered' ? 'ol' : 'ul'}>${Elements({elements}).map(element => html`<li>${element}</li>`)}<//>`,
 	text: Text,
 	link: Text,
+	user: ({ user }) => `@${user.name}`,
+	channel: ({ channel }) => `#${channel.name}`,
 	emoji: ({ unicode }) => String.fromCodePoint(parseInt(unicode, 16))
 }
 
