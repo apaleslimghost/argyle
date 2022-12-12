@@ -31,6 +31,7 @@ const Elements = ({ elements }) => elements.map((element, i) => html`<${Element}
 const elements = {
 	rich_text_section: Elements,
 	rich_text_list: ({ elements, style }) => html`<${style === 'ordered' ? 'ol' : 'ul'}>${Elements({elements}).map(element => html`<li>${element}</li>`)}<//>`,
+	rich_text_preformatted: ({ elements }) => html`<code><pre><${Elements} elements=${elements} /></pre></code>`,
 	text: Text,
 	link: Text,
 	user: ({ user, ...props }) => `@${user.name}`,
