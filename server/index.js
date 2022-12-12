@@ -25,7 +25,8 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 			switch(req.body.event.type) {
 				case `message`: {
 					const { user } = await slack.users.info({ user: req.body.event.user })
-					sse.send({ ...req.body.event, user })
+					const { user: parent } = req.body.event.parent_user_id ? await slack.users.info({ user: req.body.event.parent_user_id }) : {}
+					sse.send({ ...req.body.event, user, parent })
 					break
 				}
 

@@ -59,8 +59,8 @@ function App () {
 
 	return html`
 		<ul>
-			${messages.map(({ user, text, ts, blocks }) => html`
-				<li key=${ts}><strong>${user.real_name}</strong> <${Blocks} blocks=${blocks} /></li>
+			${messages.map(({ user, parent, text, ts, blocks }) => html`
+				<li key=${ts}><strong>${user.real_name}</strong> ${parent ? html`<strong>${parent.real_name}</strong>` : null} <${Blocks} blocks=${blocks} /></li>
 			`)}
 		</ul>
 	`
