@@ -11,6 +11,7 @@ const Text = ({ style = {}, text, url }) => {
 		style.bold && 'b',
 		style.italic && 'i',
 		style.strike && 's',
+		style.code && 'code',
 		url && (({ children }) => html`<a href=${url}>${children}</a>`)
 	].filter(Boolean)
 
@@ -32,8 +33,8 @@ const elements = {
 	rich_text_list: ({ elements, style }) => html`<${style === 'ordered' ? 'ol' : 'ul'}>${Elements({elements}).map(element => html`<li>${element}</li>`)}<//>`,
 	text: Text,
 	link: Text,
-	user: ({ user }) => `@${user.name}`,
-	channel: ({ channel }) => `#${channel.name}`,
+	user: ({ user, ...props }) => `@${user.name}`,
+	channel: ({ channel, ...props }) => `#${channel.name}`,
 	emoji: ({ unicode }) => String.fromCodePoint(parseInt(unicode, 16))
 }
 
