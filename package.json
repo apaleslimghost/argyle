@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w server server/index.js"
+    "start": "run-p start:*",
+    "start:server": "nodemon -w server server/index.js",
+    "start:tunnel": "lt --port 3030 --subdomain argyle"
   },
   "repository": {
     "type": "git",
@@ -18,11 +20,14 @@
   },
   "homepage": "https://github.com/apaleslimghost/argyle#readme",
   "dependencies": {
+    "body-parser": "^2.0.0-beta.1",
     "express": "^5.0.0-beta.1",
     "express-sse": "^0.5.3",
     "preact": "^10.11.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "localtunnel": "^2.0.2",
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5"
   }
 }

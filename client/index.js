@@ -11,7 +11,7 @@ function App () {
 
 	useEffect(() => {
 		function listen(event) {
-			setMessages(messages => [...messages, JSON.parse(event.data)].slice(-5))
+			setMessages(messages => [...messages, JSON.parse(event.data)])
 		}
 
 		source.addEventListener('message', listen)
@@ -23,8 +23,8 @@ function App () {
 
 	return html`
 		<ul>
-			${messages.map(date => html`
-				<li>${date}</li>
+			${messages.map(({ user_name, text, timestamp }) => html`
+				<li key=${timestamp}><strong>${user_name}</strong> ${text}</li>
 			`)}
 		</ul>
 	`
