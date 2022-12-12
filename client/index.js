@@ -20,7 +20,10 @@ const Text = ({ style = {}, text, url }) => {
 	)
 }
 
-const Fallback = () => null
+const Fallback = props => {
+	console.warn('using fallback', props)
+	return null
+}
 const Element = ({ element }) => (elements[element.type] || Fallback)(element)
 const Elements = ({ elements }) => elements.map((element, i) => html`<${Element} element=${element} key=${i} />`)
 
@@ -38,9 +41,16 @@ const blocks = {
 
 const Block = ({ block }) => (blocks[block.type] || Fallback)(block)
 const Blocks = ({ blocks }) => {
-	console.log(blocks)
 	return blocks.map(block => html`<${Block} block=${block} key=${block.id} />`)
 }
+
+const User = ({ user }) => html`
+	<span class="user" style="--color: #${user.color}">
+		<img src=${user.profile.image_32} alt=${user.real_name} />
+		<!-- ${console.log(user)} -->
+		${user.real_name}
+	</span>
+`
 
 function App () {
 	const [messages, setMessages] = useState([])
@@ -60,7 +70,7 @@ function App () {
 	return html`
 		<ul>
 			${messages.map(({ user, parent, text, ts, blocks }) => html`
-				<li key=${ts}><strong>${user.real_name}</strong> ${parent ? html`<strong>${parent.real_name}</strong>` : null} <${Blocks} blocks=${blocks} /></li>
+				<li key=${ts}><${User} user=${user}/> ${parent ? html`<${User} user=${parent}/>` : null} <${Blocks} blocks=${blocks} /></li>
 			`)}
 		</ul>
 	`
