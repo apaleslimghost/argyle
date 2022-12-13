@@ -1,5 +1,6 @@
+import 'https://cdn.skypack.dev/preact/debug'
 import { h, render } from 'https://cdn.skypack.dev/preact'
-import { useState, useEffect } from 'https://cdn.skypack.dev/preact/hooks'
+import { useState, useEffect, useErrorBoundary } from 'https://cdn.skypack.dev/preact/hooks'
 import htm from 'https://cdn.skypack.dev/htm'
 
 const html = htm.bind(h)
@@ -56,12 +57,24 @@ const User = ({ user }) => html`
 	</span>
 `
 
+const Message = ({ user, parent, text, blocks }) => html`
+	<${User} user=${user}/> ${parent ? html`<${User} user=${parent}/>` : null} <${Blocks} blocks=${blocks} />
+`
+
 function App () {
-	const [messages, setMessages] = useState([])
+	const [ messages, setMessages ] = useState([])
+	const [ error, resetError ] = useErrorBoundary()
+
+	if(error) {
+		console.error(error)
+		resetError()
+	}
 
 	useEffect(() => {
 		function listen(event) {
-			setMessages(messages => [...messages, JSON.parse(event.data)])
+			try {
+				setMessages(messages => [...messages, JSON.parse(event.data)])
+			} catch {}
 		}
 
 		source.addEventListener('message', listen)
@@ -73,8 +86,8 @@ function App () {
 
 	return html`
 		<ul>
-			${messages.map(({ user, parent, text, ts, blocks }) => html`
-				<li key=${ts}><${User} user=${user}/> ${parent ? html`<${User} user=${parent}/>` : null} <${Blocks} blocks=${blocks} /></li>
+			${messages.map(({ ts, ...message }) => html`
+				<li key=${ts}><${Message} ...${message} /></li>
 			`)}
 		</ul>
 	`
