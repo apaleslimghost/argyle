@@ -38,11 +38,17 @@ async function decorateElement(element) {
 }
 
 async function decorateElements(elements) {
-	await elements.map(element => decorateElement(element))
+	await Promise.all(elements.map(decorateElement))
+}
+
+async function decorateBlock(block) {
+	if(block.elements) {
+		await decorateElements(block.elements)
+	}
 }
 
 async function decorateBlocks(blocks) {
-	await blocks.map(block => block.elements && decorateElements(block.elements))
+	await Promise.all(blocks.map(decorateBlock))
 }
 
 app.post('/webhook', bodyParser.json(), async (req, res) => {
@@ -72,12 +78,9 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 
 						await Promise.all(promises)
 
-						console.log(event)
-
 						sse.send(event)
 					}
 
-					console.log(req.body)
 					res.status(201).send()
 					break
 				}
