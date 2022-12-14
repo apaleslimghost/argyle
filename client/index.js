@@ -2,10 +2,11 @@ import 'https://cdn.skypack.dev/preact/debug'
 import { h, render } from 'https://cdn.skypack.dev/preact'
 import { useState, useEffect, useErrorBoundary, useRef, useLayoutEffect } from 'https://cdn.skypack.dev/preact/hooks'
 import htm from 'https://cdn.skypack.dev/htm'
+import ReconnectingEventSource from 'https://cdn.skypack.dev/reconnecting-eventsource'
 
 const html = htm.bind(h)
 
-const source = new EventSource('/events')
+const source = new ReconnectingEventSource('/events')
 
 const Text = ({ url, style = {}, text = url }) => {
 	const wrappers = [
