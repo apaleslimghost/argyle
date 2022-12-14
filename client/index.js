@@ -39,7 +39,7 @@ const elements = {
 	user: ({ user, ...props }) => html`<${User} user=${user} mention />`,
 	channel: ({ channel, ...props }) => `#${channel.name}`,
 	emoji: ({ unicode, url, name }) => unicode
-		? unicode.split('-').map(codePoint => String.fromCodePoint(parseInt(codepoint, 16))).join('')
+		? unicode.split('-').map(codepoint => String.fromCodePoint(parseInt(codepoint, 16))).join('')
 		: html`<img class="emoji" alt=${name} src=${url} />`
 }
 
