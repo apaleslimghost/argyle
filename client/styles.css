@@ -5,6 +5,15 @@ body {
 	font-size: calc(1vmax + 10px);
 }
 
+a:link, a:visited {
+	font-weight: bold;
+	color: #CDF;
+}
+
+a:hover, a:active {
+	color: #DEF;
+}
+
 .user {
 	font-weight: bold;
 	color: var(--color, inherit);

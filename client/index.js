@@ -7,7 +7,7 @@ const html = htm.bind(h)
 
 const source = new EventSource('/events')
 
-const Text = ({ style = {}, text, url }) => {
+const Text = ({ url, style = {}, text = url }) => {
 	const wrappers = [
 		style.bold && 'b',
 		style.italic && 'i',
