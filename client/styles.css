@@ -1,5 +1,8 @@
 body {
 	font-family: Lato, sans-serif;
+	background: black;
+	color: white;
+	font-size: calc(1vmax + 10px);
 }
 
 .user {
@@ -37,8 +40,8 @@ html, body, main {
 	height: 100%;
 	margin: 0;
 	padding: 1ex;
-	column-gap: 1ex;
-	row-gap: 2em;
+	row-gap: 1ex;
+	column-gap: 1em;
 	overflow: hidden;
 }
 

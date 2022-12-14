@@ -35,7 +35,7 @@ const elements = {
 	rich_text_preformatted: ({ elements }) => html`<code><pre><${Elements} elements=${elements} /></pre></code>`,
 	text: Text,
 	link: Text,
-	user: ({ user, ...props }) => `@${user.name}`,
+	user: ({ user, ...props }) => html`<${User} user=${user} mention />`,
 	channel: ({ channel, ...props }) => `#${channel.name}`,
 	emoji: ({ unicode, url, name }) => unicode ? String.fromCodePoint(parseInt(unicode, 16)) : html`<img class="emoji" alt=${name} src=${url} />`
 }
@@ -49,10 +49,9 @@ const Blocks = ({ blocks }) => {
 	return blocks.map(block => html`<${Block} block=${block} key=${block.id} />`)
 }
 
-const User = ({ user }) => html`
+const User = ({ user, mention = false }) => html`
 	<span class="user" style="--color: #${user.color}">
-		<img src=${user.profile.image_32} alt=${user.real_name} />
-		<!-- ${console.log(user)} -->
+		${mention ? '@' : html`<img src=${user.profile.image_32} alt=${user.real_name} />`}
 		${user.real_name}
 	</span>
 `
@@ -93,8 +92,8 @@ const Message = ({ user, parent, text, blocks }) => {
 
 	return html`
 		<span className=${`message ${transitionClass}`} ref=${ref}>
-			<${User} user=${user}/>${' '}
-			${parent ? html`<${User} user=${parent}/>` : null}${' '}
+			<${User} user=${user} />${' '}
+			${parent ? html`➥<${User} user=${parent} mention />` : null}${' '}
 			<${Blocks} blocks=${blocks} />
 		</span>
 	`
