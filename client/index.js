@@ -37,7 +37,7 @@ const elements = {
 	link: Text,
 	user: ({ user, ...props }) => `@${user.name}`,
 	channel: ({ channel, ...props }) => `#${channel.name}`,
-	emoji: ({ unicode }) => String.fromCodePoint(parseInt(unicode, 16))
+	emoji: ({ unicode, url, name }) => unicode ? String.fromCodePoint(parseInt(unicode, 16)) : html`<img class="emoji" alt=${name} src=${url} />`
 }
 
 const blocks = {

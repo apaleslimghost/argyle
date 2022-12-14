@@ -13,6 +13,15 @@ app.use('/common', express.static('common'))
 
 app.get('/events', (req, res, next) => { res.flush = () => {}; next() }, sse.init)
 
+let emojiList
+async function getEmoji(name) {
+	if(!emojiList) {
+		emojiList = (await slack.emoji.list()).emoji
+	}
+
+	return emojiList[name]
+}
+
 async function decorateElement(element) {
 	const promises = []
 
@@ -30,6 +39,12 @@ async function decorateElement(element) {
 		case 'user':
 			promises.push(
 				slack.users.info({ user: element.user_id }).then(({user}) => element.user = user)
+			)
+			break
+
+		case 'emoji':
+			promises.push(
+				getEmoji(element.name).then(url => element.url = url)
 			)
 			break
 	}
