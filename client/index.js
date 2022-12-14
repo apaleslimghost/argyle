@@ -38,7 +38,9 @@ const elements = {
 	link: Text,
 	user: ({ user, ...props }) => html`<${User} user=${user} mention />`,
 	channel: ({ channel, ...props }) => `#${channel.name}`,
-	emoji: ({ unicode, url, name }) => unicode ? String.fromCodePoint(parseInt(unicode, 16)) : html`<img class="emoji" alt=${name} src=${url} />`
+	emoji: ({ unicode, url, name }) => unicode
+		? unicode.split('-').map(codePoint => String.fromCodePoint(parseInt(codepoint, 16))).join('')
+		: html`<img class="emoji" alt=${name} src=${url} />`
 }
 
 const blocks = {
