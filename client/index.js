@@ -101,7 +101,7 @@ const Message = ({ user, parent, text, blocks }) => {
 }
 
 const MessageList = ({ messages }) => html`
-	<ul>
+	<ul class="message-list">
 		${messages.map(({ ts, ...message }) => html`
 			<li key=${ts}><${Message} ...${message} /></li>
 		`)}
