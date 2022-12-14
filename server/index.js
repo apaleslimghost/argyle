@@ -43,9 +43,11 @@ async function decorateElement(element) {
 			break
 
 		case 'emoji':
-			promises.push(
-				getEmoji(element.name).then(url => element.url = url)
-			)
+			if(!emoji.unicode) {
+				promises.push(
+					getEmoji(element.name).then(url => element.url = url)
+				)
+			}
 			break
 	}
 
