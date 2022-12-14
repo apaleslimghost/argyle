@@ -1,6 +1,6 @@
 import 'https://cdn.skypack.dev/preact/debug'
 import { h, render } from 'https://cdn.skypack.dev/preact'
-import { useState, useEffect, useErrorBoundary } from 'https://cdn.skypack.dev/preact/hooks'
+import { useState, useEffect, useErrorBoundary, useRef, useLayoutEffect } from 'https://cdn.skypack.dev/preact/hooks'
 import htm from 'https://cdn.skypack.dev/htm'
 
 const html = htm.bind(h)
@@ -57,8 +57,55 @@ const User = ({ user }) => html`
 	</span>
 `
 
-const Message = ({ user, parent, text, blocks }) => html`
-	<${User} user=${user}/> ${parent ? html`<${User} user=${parent}/>` : null} <${Blocks} blocks=${blocks} />
+const useTransition = (name) => {
+	const [ className, setClassname ] = useState('')
+	const ref = useRef(null)
+
+	useLayoutEffect(() => {
+		setClassname(`${name}-enter`)
+
+		const frame = requestAnimationFrame(() => {
+			setClassname(`${name}-enter ${name}-enter-active`)
+		})
+
+		function removeClass() {
+			setClassname('')
+		}
+
+		if(ref.current) {
+			ref.current.addEventListener('transitionend', removeClass, { once: true })
+		}
+
+		return () => {
+			cancelAnimationFrame(frame)
+
+			if(ref.current) {
+				ref.current.removeEventListener('transitionend', removeClass)
+			}
+		}
+	}, [])
+
+	return [className, ref]
+}
+
+const Message = ({ user, parent, text, blocks }) => {
+	const [transitionClass, ref] = useTransition('message')
+
+	return html`
+		<span className=${`message ${transitionClass}`} ref=${ref}>
+			<${User} user=${user}/>${' '}
+			${parent ? html`<${User} user=${parent}/>` : null}${' '}
+			<${Blocks} blocks=${blocks} />
+		</span>
+	`
+}
+
+const MessageList = ({ messages }) => html`
+	<ul>
+		${messages.map(({ ts, ...message }) => html`
+			<li key=${ts}><${Message} ...${message} /></li>
+		`)}
+	</ul>
 `
 
 function App () {
@@ -85,11 +132,7 @@ function App () {
 	}, [])
 
 	return html`
-		<ul>
-			${messages.map(({ ts, ...message }) => html`
-				<li key=${ts}><${Message} ...${message} /></li>
-			`)}
-		</ul>
+		<${MessageList} messages=${messages} />
 	`
 }
 

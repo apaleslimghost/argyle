@@ -6,7 +6,7 @@
   "scripts": {
     "start": "run-p start:*",
     "start:server": "nodemon -r dotenv/config -w server server/index.js",
-    "start:tunnel": "lt --port 3030 --subdomain argyle2"
+    "start:tunnel": "lt --port 3030 --subdomain argyle"
   },
   "repository": {
     "type": "git",

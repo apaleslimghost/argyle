@@ -15,3 +15,20 @@ body {
 	border-radius: 0.625em;
 	margin-right: .5ex;
 }
+
+.message {
+	display: inline-block;
+}
+
+.message-enter {
+	transform: translateX(100%);
+	opacity: 0;
+}
+
+.message-enter.message-enter-active {
+	transform: translateX(0);
+	opacity: 1;
+	transition:
+		opacity .3s linear .1s,
+		transform .2s ease-out;
+}
