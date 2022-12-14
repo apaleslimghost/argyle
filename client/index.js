@@ -120,7 +120,7 @@ function App () {
 	useEffect(() => {
 		function listen(event) {
 			try {
-				setMessages(messages => [...messages, JSON.parse(event.data)])
+				setMessages(messages => [...messages, JSON.parse(event.data)].slice(-20))
 			} catch {}
 		}
 
