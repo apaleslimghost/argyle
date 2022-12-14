@@ -116,4 +116,6 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 	}
 })
 
-app.listen(3030, () => console.log(`listening on http://localhost:3030`))
+const port = process.env.PORT || 3030
+
+app.listen(port, () => console.log(`listening on http://localhost:${port}`))
