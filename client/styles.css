@@ -54,6 +54,15 @@ html, body, main {
 	overflow: hidden;
 }
 
+a.external-link, a.external-link:hover, a.external-link:active {
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+	background: #CDF;
+	border-radius: 0.1em;
+	padding: 0 0.25ex;
+}
+
 .message {
 	display: inline-block;
 	overflow: hidden;

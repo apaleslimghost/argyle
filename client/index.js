@@ -8,7 +8,7 @@ const html = htm.bind(h)
 
 const source = new ReconnectingEventSource('/events')
 
-const Text = ({ url, style = {}, text = url }) => {
+const Text = ({ url, style = {}, text }) => {
 	const wrappers = [
 		style.bold && 'b',
 		style.italic && 'i',
@@ -16,6 +16,11 @@ const Text = ({ url, style = {}, text = url }) => {
 		style.code && 'code',
 		url && (({ children }) => html`<a href=${url}>${children}</a>`)
 	].filter(Boolean)
+
+	if(!text && url) {
+		const parsed = new URL(url)
+		return html`<a href=${url} class="external-link">${parsed.hostname} ⎋</a>`
+	}
 
 	return wrappers.reduce(
 		(wrapped, wrapper) => html`<${wrapper}>${wrapped}<//>`,
