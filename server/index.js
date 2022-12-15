@@ -77,7 +77,6 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 		}
 
 		case `event_callback`: {
-			console.log(req.body)
 			switch(req.body.event.type) {
 				case `message`: {
 					if(req.body.event.blocks) {
