@@ -116,7 +116,7 @@ const MessageList = ({ messages }) => html`
 `
 
 function App () {
-	const [ messages, setMessages ] = useState([])
+	const [ messages, setMessages ] = useState(localStorage.argyle ? JSON.parse([localStorage.argyle]) : [])
 	const [ error, resetError ] = useErrorBoundary()
 
 	if(error) {
@@ -127,7 +127,11 @@ function App () {
 	useEffect(() => {
 		function listen(event) {
 			try {
-				setMessages(messages => [...messages, JSON.parse(event.data)].slice(-20))
+				setMessages(messages => {
+					const newMessages = [...messages, JSON.parse(event.data)].slice(-20)
+					localStorage.argyle = JSON.stringify(newMessages)
+					return newMessages
+				})
 			} catch {}
 		}
 
