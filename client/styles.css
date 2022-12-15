@@ -2,7 +2,7 @@ body {
 	font-family: Lato, sans-serif;
 	background: black;
 	color: white;
-	font-size: calc(0.8vmax + 10px);
+	font-size: calc(0.8vmax + 8px);
 }
 
 a:link, a:visited {
