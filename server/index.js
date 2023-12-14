@@ -15,10 +15,10 @@ app.use('/common', express.static('common'))
 app.get('/events', (req, res, next) => { res.flush = () => {}; next() }, sse.init)
 
 app.get('/image',  async (req, res, next) => {
-	const url = new URL(req.query.url)
-	if(url.host !== 'files.slack.com') {
-		return res.sendStatus(400)
-	}
+	const url = req.query.url
+	// if(url.host !== 'files.slack.com') {
+	// 	return res.sendStatus(400)
+	// }
 
 	const image = await fetch(url, {
 		headers: {
