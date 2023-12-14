@@ -3,6 +3,7 @@ const SSE = require('express-sse')
 const bodyParser = require('body-parser')
 const util = require('util')
 const { WebClient } = require('@slack/web-api')
+const { Readable } = require('stream')
 
 const sse = new SSE([])
 const slack = new WebClient(process.env.SLACK_BOT_TOKEN)
@@ -12,6 +13,23 @@ app.use(express.static('client'))
 app.use('/common', express.static('common'))
 
 app.get('/events', (req, res, next) => { res.flush = () => {}; next() }, sse.init)
+
+app.get('/image',  async (req, res, next) => {
+	const url = req.query.url
+
+	const image = await fetch(url, {
+		headers: {
+			'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`
+		}
+	})
+
+	if(!image.ok) {
+		throw new Error(image.statusText)
+	}
+
+	res.set('content-type', image.headers.get('content-type'))
+	Readable.fromWeb(image.body).pipe(res)
+})
 
 let emojiList
 async function getEmoji(name) {
@@ -79,7 +97,8 @@ app.post('/webhook', bodyParser.json(), async (req, res) => {
 		case `event_callback`: {
 			switch(req.body.event.type) {
 				case `message`: {
-					if(req.body.event.blocks) {
+					if(req.body.event.blocks || req.body.event.files) {
+						req.body.event.blocks ??= []
 						const event = { ...req.body.event }
 
 						const promises = [

@@ -67,6 +67,22 @@ const User = ({ user, mention = false }) => html`
 	</span>
 `
 
+const Image = ({ thumb_360, thumb_360_h: height, thumb_360_w: width, title }) => {
+	if(!thumb_360) return null
+
+	const aspect =  height / width
+	const newWidth = 40 / aspect
+
+	return html`
+		<img src=${`/image?url=${encodeURIComponent(thumb_360)}`} alt=${title} class="image" width=${newWidth}  height="40" />`
+}
+
+const Images = ({ files }) => html`
+	<div class="images">
+		${files.map(file => html`<${Image} ...${file} />`)}
+	</div>
+`
+
 const useTransition = (name) => {
 	const [ className, setClassname ] = useState('')
 	const ref = useRef(null)
@@ -98,7 +114,7 @@ const useTransition = (name) => {
 	return [className, ref]
 }
 
-const Message = ({ user, parent, text, blocks }) => {
+const Message = ({ user, parent, text, blocks, files }) => {
 	const [transitionClass, ref] = useTransition('message')
 
 	return html`
@@ -106,6 +122,7 @@ const Message = ({ user, parent, text, blocks }) => {
 			<${User} user=${user} />${' '}
 			${parent ? html`➥<${User} user=${parent} mention />` : null}${' '}
 			<${Blocks} blocks=${blocks} />
+			${files && html`<${Images} files=${files} />`}
 		</span>
 	`
 }
