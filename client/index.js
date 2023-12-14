@@ -22,9 +22,12 @@ const Text = ({ url, style = {}, text }) => {
 		return html`<a href=${url} class="external-link">${parsed.hostname} ⎋</a>`
 	}
 
+	const lines = text.split('\n')
+	const interspersed = lines.flatMap(line => [line, html`<br />`]).slice(0, -1)
+
 	return wrappers.reduce(
 		(wrapped, wrapper) => html`<${wrapper}>${wrapped}<//>`,
-		text === '\\n' ? html`<br>` : text
+		interspersed
 	)
 }
 
