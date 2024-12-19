@@ -1,8 +1,8 @@
-import 'https://cdn.skypack.dev/preact/debug'
-import { h, render } from 'https://cdn.skypack.dev/preact'
-import { useState, useEffect, useErrorBoundary, useRef, useLayoutEffect } from 'https://cdn.skypack.dev/preact/hooks'
-import htm from 'https://cdn.skypack.dev/htm'
-import ReconnectingEventSource from 'https://cdn.skypack.dev/reconnecting-eventsource'
+import 'https://esm.sh/preact/debug'
+import { h, render } from 'https://esm.sh/preact'
+import { useState, useEffect, useErrorBoundary, useRef, useLayoutEffect } from 'https://esm.sh/preact/hooks'
+import htm from 'https://esm.sh/htm'
+import ReconnectingEventSource from 'https://esm.sh/reconnecting-eventsource'
 
 const html = htm.bind(h)
 
