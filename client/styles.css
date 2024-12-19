@@ -108,6 +108,8 @@ a.external-link, a.external-link:hover, a.external-link:active {
 .image {
 	border-radius: 0.25em;
 	border: 1px solid #333;
+	max-width: max(360px, 100%);
+	height: auto;
 }
 
 .images {
