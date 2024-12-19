@@ -90,6 +90,10 @@ async function decorateBlocks(blocks) {
 }
 
 app.post('/webhook', bodyParser.json(), async (req, res) => {
+	console.log({
+		event: 'INCOMING_WEBHOOK',
+		webhook: req.body
+	})
 	switch(req.body.type) {
 		case `url_verification`: {
 			const { challenge } = req.body
