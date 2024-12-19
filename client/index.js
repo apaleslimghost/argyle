@@ -71,10 +71,11 @@ const Image = ({ thumb_360, thumb_360_h: height, thumb_360_w: width, title }) =>
 	if(!thumb_360) return null
 
 	const aspect =  height / width
-	const newWidth = 40 / aspect
+	const newHeight = 60
+	const newWidth = newHeight / aspect
 
 	return html`
-		<img src=${`/image?url=${encodeURIComponent(thumb_360)}`} alt=${title} class="image" width=${newWidth}  height="40" />`
+		<img src=${`/image?url=${encodeURIComponent(thumb_360)}`} alt=${title} class="image" width=${newWidth} height=${newHeight} />`
 }
 
 const Images = ({ files }) => html`
