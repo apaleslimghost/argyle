@@ -67,18 +67,17 @@ a.external-link, a.external-link:hover, a.external-link:active {
 	display: inline-block;
 	overflow: hidden;
 	word-break: break-word;
-}
-
-.message-enter {
 	opacity: 0;
+
+
+	animation: message-fade .3s ease-out .1s forwards;
 }
 
-.message-enter.message-enter-active {
-	transform: translate(0, 0);
-	opacity: 1;
-	transition:
-		opacity .3s linear .1s,
-		transform .2s ease-out;
+@keyframes message-fade {
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
 }
 
 @media (orientation: portrait) {
@@ -86,7 +85,7 @@ a.external-link, a.external-link:hover, a.external-link:active {
 		flex-direction: column;
 	}
 
-	.message-enter {
+	.message {
 		transform: translateX(100%);
 	}
 }
@@ -94,9 +93,6 @@ a.external-link, a.external-link:hover, a.external-link:active {
 @media (orientation: landscape) {
 	.message {
 		width: 16em;
-	}
-
-	.message-enter {
 		transform: translateY(-100%);
 	}
 

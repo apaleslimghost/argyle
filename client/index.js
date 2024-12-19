@@ -84,42 +84,9 @@ const Images = ({ files }) => html`
 	</div>
 `
 
-const useTransition = (name) => {
-	const [ className, setClassname ] = useState('')
-	const ref = useRef(null)
-
-	useLayoutEffect(() => {
-		setClassname(`${name}-enter`)
-
-		const frame = requestAnimationFrame(() => {
-			setClassname(`${name}-enter ${name}-enter-active`)
-		})
-
-		function removeClass() {
-			setClassname('')
-		}
-
-		if(ref.current) {
-			ref.current.addEventListener('transitionend', removeClass, { once: true })
-		}
-
-		return () => {
-			cancelAnimationFrame(frame)
-
-			if(ref.current) {
-				ref.current.removeEventListener('transitionend', removeClass)
-			}
-		}
-	}, [])
-
-	return [className, ref]
-}
-
 const Message = ({ user, parent, text, blocks, files }) => {
-	const [transitionClass, ref] = useTransition('message')
-
 	return html`
-		<span className=${`message ${transitionClass}`} ref=${ref}>
+		<span className="message">
 			<${User} user=${user} />${' '}
 			${parent ? html`➥<${User} user=${parent} mention />` : null}${' '}
 			<${Blocks} blocks=${blocks} />
